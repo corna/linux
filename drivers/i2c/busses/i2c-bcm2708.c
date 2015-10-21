@@ -332,6 +332,10 @@ static struct i2c_algorithm bcm2708_i2c_algorithm = {
 	.functionality = bcm2708_i2c_functionality,
 };
 
+static const struct i2c_adapter_quirks bcm2708_i2c_quirks = {
+	.flags = I2C_AQ_NO_CLK_STRETCH,
+};
+
 static int bcm2708_i2c_probe(struct platform_device *pdev)
 {
 	struct resource *regs;
@@ -398,6 +402,7 @@ static int bcm2708_i2c_probe(struct platform_device *pdev)
 	adap->nr = pdev->id;
 	strlcpy(adap->name, dev_name(&pdev->dev), sizeof(adap->name));
 	adap->dev.of_node = pdev->dev.of_node;
+	adap->quirks = &bcm2708_i2c_quirks;
 
 	switch (pdev->id) {
 	case 0:
